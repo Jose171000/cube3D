@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+          }
+        }
+      </script>
+</head>
+
+<body>
+    <script type="module">
+        import * as THREE from 'three';
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+
+        //adding 'camera' to scene
+        scene.add(camera);
+        camera.position.z = 5;
+
+        //renderer
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor("#174F8A");
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        //mesh
+        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const dodecahedro = new THREE.Mesh(geometry, material);
+        scene.add(dodecahedro);
+
+        console.log(scene);
+        document.body.appendChild(renderer.domElement);
+        //loop
+        const clock = new THREE.Clock();
+        function animated() {
+            const elapsedTime = clock.getElapsedTime();
+            dodecahedro.rotation.x = elapsedTime;
+            dodecahedro.rotation.y = elapsedTime;
+            dodecahedro.position.x = Math.cos(-elapsedTime);
+            dodecahedro.position.y = Math.sin(elapsedTime);
+            requestAnimationFrame(animated);
+            renderer.render(scene, camera);
+        }
+        animated()
+    </script>
+</body>
+
+</html>
